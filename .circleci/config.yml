@@ -25,5 +25,14 @@ jobs:
             --collect:"XPlat Code Coverage" 
             --settings coverlet.runsettings
             --results-directory './CodeCoverageResults'
+            
       - store_artifacts:
           path: ./CodeCoverageResults
+      - run:
+          name: Install report
+          command: dotnet tool install -g dotnet-reportgenerator-globaltool
+      - run:
+          name: Install report 
+          command: reportgenerator "-reports:./CodeCoverageResults/../coverage.cobertura.xml" "-targetdir:./coveragereport" -reporttypes:Html
+      - store_artifacts:
+          path: ./coveragereport
