@@ -34,6 +34,7 @@ jobs:
       - run:
           name: Install report
           command: dotnet tool install -g dotnet-reportgenerator-globaltool
+          
       - run:
 #           command: reportgenerator "-reports:./CodeCoverageResults/../coverage.cobertura.xml" "-targetdir:./coveragereport" -reporttypes:Html
           command: |
