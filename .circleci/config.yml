@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 orbs:
   dotnet-tools: bwp-orbs/dotnet-tools@30.0.0
   
