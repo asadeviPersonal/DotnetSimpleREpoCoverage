@@ -32,7 +32,12 @@ jobs:
           name: Install report
           command: dotnet tool install -g dotnet-reportgenerator-globaltool
       - run:
-          name: Install report 
           command: reportgenerator "-reports:./CodeCoverageResults/../coverage.cobertura.xml" "-targetdir:./coveragereport" -reporttypes:Html
+          command: |
+              reportgenerator \
+                -reports:./CodeCoverageResults/../coverage.cobertura.xml \
+                -targetdir:./coveragereportHTML \
+                -verbosity:Off
+          name: Generate code coverage report
       - store_artifacts:
-          path: ./coveragereport
+          path: ./coveragereportHTML
