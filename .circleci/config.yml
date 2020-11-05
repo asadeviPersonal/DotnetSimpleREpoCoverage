@@ -1,4 +1,7 @@
 version: 2
+orbs:
+  dotnet-tools: bwp-orbs/dotnet-tools@30.0.0
+  
 jobs:
   build:
     docker:
