@@ -14,37 +14,86 @@ jobs:
       - run:
           name: Build solution
           command: dotnet build   
+          
       - run:
-          command: |
-            dotnet test \
-              --logger trx \
-              -r ~/repo/Tests/results \
-              /p:CollectCoverage=true \
-              /p:CoverletOutputFormat=opencover \
-              /p:CoverletOutput=/root/repo/Tests/results/ \
-              /p:Exclude="[MySqlConnector]*%2c[System.*]*"
-          name: Unit Test
-      - run:
-          command: |
-            reportgenerator \
-              -reports:/root/repo/Tests/results/coverage.opencover.xml \
-              -targetdir:/root/repo/Tests/results/html_report \
-              -verbosity:Off
-          name: Generate code coverage report
-      - run:
-          command: |
-            trx2junit ~/repo/Tests/results/*.trx
-          name: Convert test results to junit format
-          when: always
-      - store_test_results:
-          path: ~/repo/Tests/results
+          name: Run tests 
+          command: dotnet test --no-build --logger "trx;LogFileName=/root/project/tests/TestResult/xunit-output.xml"
       - store_artifacts:
-          destination: TestResults
-          path: ~/repo/Tests/results
-      - save_cache:
-          key: >-
-            v1-unit-test-coverage-{{ .Environment.CIRCLE_BRANCH }}-{{
-            .Environment.CIRCLE_SHA1 }}
-          paths:
-            - ~/repo/Tests/results
+          path: /root/project/tests/TestResult/
+          when: always
+      - run:
+          name: coverage
+          command: dotnet test \
+                  /p:CollectCoverage=true \
+                  /p:CoverletOutputFormat=\"json,opencover,cobertura\" \
+                  /p:CoverletOutput=/root/repo/Tests/results/
+#           command: dotnet test --no-build -v n --results-directory:test_coverage --collect:"Code Coverage"
+#           command: dotnet test -c Debug -v minimal 
+#             --no-build 
+#             --collect:"XPlat Code Coverage" 
+#             --settings coverlet.runsettings
+#             --results-directory './CodeCoverageResults'
+
+            
+      - store_artifacts:
+          path: ./CodeCoverageResults
+      - run:
+          name: Install report
+          command: |
+          dotnet tool install -g dotnet-reportgenerator-globaltool &&
+                  dotnet tool install dotnet-reportgenerator-globaltool --tool-path tools &&
+                  dotnet new tool-manifest &&
+                  dotnet tool install dotnet-reportgenerator-globaltool
+          
+          
+      - run:
+#           command: reportgenerator "-reports:./CodeCoverageResults/../coverage.cobertura.xml" "-targetdir:./coveragereport" -reporttypes:Html
+          command: |
+              reportgenerator \
+                -reports:./CodeCoverageResults/../coverage.cobertura.xml \
+                -targetdir:./coveragereportHTML \
+                -verbosity:Off
+          name: Generate code coverage report
+      - store_artifacts:
+          path: ./coveragereportHTML
+          
+          
+          
+          
+          
+          
+          
+#       - run:
+#           command: |
+#             dotnet test \
+#               --logger trx \
+#               -r ~/repo/Tests/results \
+#               /p:CollectCoverage=true \
+#               /p:CoverletOutputFormat=opencover \
+#               /p:CoverletOutput=/root/repo/Tests/results/ \
+#               /p:Exclude="[MySqlConnector]*%2c[System.*]*"
+#           name: Unit Test
+#       - run:
+#           command: |
+#             reportgenerator \
+#               -reports:/root/repo/Tests/results/coverage.opencover.xml \
+#               -targetdir:/root/repo/Tests/results/html_report \
+#               -verbosity:Off
+#           name: Generate code coverage report
+#       - run:
+#           command: |
+#             trx2junit ~/repo/Tests/results/*.trx
+#           name: Convert test results to junit format
+#           when: always
+#       - store_test_results:
+#           path: ~/repo/Tests/results
+#       - store_artifacts:
+#           destination: TestResults
+#           path: ~/repo/Tests/results
+#       - save_cache:
+#           key: >-
+#             v1-unit-test-coverage-{{ .Environment.CIRCLE_BRANCH }}-{{
+#             .Environment.CIRCLE_SHA1 }}
+#           paths:
+#             - ~/repo/Tests/results
      
