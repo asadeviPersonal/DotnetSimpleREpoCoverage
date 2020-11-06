@@ -41,9 +41,9 @@ jobs:
             dotnet tool install dotnet-reportgenerator-globaltool --tool-path tools --version 4.7.1
             dotnet new tool-manifest
             dotnet tool install dotnet-reportgenerator-globaltool --version 4.7.1
-#       - run: 
-#           command: dotnet add package ReportGenerator --version x.y.z
-#           name: pakage
+      - run: 
+          command: export PATH="$PATH:/root/.dotnet/tools"
+          name: pakage
 
       - run:
           command: | 
