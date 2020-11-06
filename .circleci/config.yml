@@ -8,7 +8,7 @@ jobs:
       - image: mcr.microsoft.com/dotnet/core/sdk:3.1
     
     steps:
-#       - checkout
+      - checkout
       - run:
           name: Restore solution
           command: dotnet restore 
@@ -31,8 +31,24 @@ jobs:
             --settings coverlet.runsettings
             --results-directory './CodeCoverageResults'
             
-#       - store_artifacts:
-#           path: ./CodeCoverageResults
+      - store_artifacts:
+          path: ./CodeCoverageResults
+          
+      - run:
+          name: install report
+          command: Install-Package ReportGenerator -Version 4.7.1
+      - run: 
+          command: dotnet add package ReportGenerator --version x.y.z
+          name: pakage
+
+      - run:
+          command: dotnet $(asadeviPersonal)\.nuget\packages\reportgenerator\x.y.z\tools\netcoreapp3.0\ReportGenerator.dll \
+                  "-reports:./CodeCoverageResults/../coverage.cobertura.xml" \
+                  "-targetdir:./coveragereportHTML" \
+                  -reporttypes:Html
+                  
+      - store_artifacts:
+          path: ./coveragereportHTML
           
 #       - name: Setup .NET Core # Required to execute ReportGenerator
 #         uses: actions/setup-dotnet@v1
@@ -60,18 +76,7 @@ jobs:
 #       - run:
 #           name: Install report
 #           command: dotnet tool install dotnet-reportgenerator-globaltool  
-        - run:
-            name: install report
-            command: Install-Package ReportGenerator -Version 4.7.1
-        - run: 
-            command: dotnet add package ReportGenerator --version x.y.z
-            name: pakage
-            
-        - run:
-            command: dotnet $(asadeviPersonal)\.nuget\packages\reportgenerator\x.y.z\tools\netcoreapp3.0\ReportGenerator.dll \
-                    "-reports:./CodeCoverageResults/../coverage.cobertura.xml" \
-                    "-targetdir:./coveragereportHTML" \
-                    -reporttypes:Html
+
 #       - run:
 #           command: reportgenerator "-reports:./CodeCoverageResults/../coverage.cobertura.xml" "-targetdir:./coveragereport" -reporttypes:Html
 #           command: dotnet $(asadeviPersonal).nuget\packages\reportgenerator\x.y.z\tools\netcoreapp3.0\ReportGenerator.dll -reports:./CodeCoverageResults/../coverage.cobertura.xml \
@@ -86,8 +91,7 @@ jobs:
 #           name: Generate code coverage report
 
 
-      - store_artifacts:
-          path: ./coveragereportHTML
+ 
           
           
        
