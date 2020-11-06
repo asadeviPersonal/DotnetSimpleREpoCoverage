@@ -14,14 +14,10 @@ jobs:
       - run:
           name: Build solution
           command: dotnet build   
-    parameters:
-      project-path:~/repo/tests/
-        description: Path to the project file to test.
-        type: string
     steps:
       - run:
           command: |
-            dotnet test << parameters.project-path >> \
+            dotnet test ~/repo/tests/ \
               --logger trx \
               -r ~/repo/Tests/results \
               /p:CollectCoverage=true \
