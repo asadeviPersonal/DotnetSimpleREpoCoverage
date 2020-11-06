@@ -50,7 +50,7 @@ jobs:
       - run:
           command: | 
                 dotnet reportgenerator \
-                  "-reports:/root/project/tests/TestResult/xunit-output.xml" \
+                  "-reports:/root/project/tests/../xunit-output.xml" \
                   "-targetdir:./coveragereportHTML" \
                   -reporttypes:Html
 #           command: |
