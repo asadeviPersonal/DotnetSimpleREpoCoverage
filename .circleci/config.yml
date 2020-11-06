@@ -13,39 +13,7 @@ jobs:
           command: dotnet restore 
       - run:
           name: Build solution
-          command: dotnet build 
-#       - run:
-#           name: Run tests 
-#           command: dotnet test --no-build --logger "trx;LogFileName=/root/project/UnitTestProject1/TestResult/xunit-output.xml"
-#       - store_artifacts:
-#           path: /root/project/UnitTestProject1/TestResult/
-#           when: always
-#       - run:
-#           name: coverage
-# #           command: dotnet test --no-build -v n --results-directory:test_coverage --collect:"Code Coverage"
-#           command: dotnet test -c Debug -v minimal 
-#             --no-build 
-#             --collect:"XPlat Code Coverage" 
-#             --settings coverlet.runsettings
-#             --results-directory './CodeCoverageResults'
-            
-#       - store_artifacts:
-#           path: ./CodeCoverageResults
-#       - run:
-#           name: Install report
-#           command: dotnet tool install -g dotnet-reportgenerator-globaltool
-          
-#       - run:
-# #           command: reportgenerator "-reports:./CodeCoverageResults/../coverage.cobertura.xml" "-targetdir:./coveragereport" -reporttypes:Html
-#           command: |
-#               reportgenerator \
-#                 -reports:./CodeCoverageResults/../coverage.cobertura.xml \
-#                 -targetdir:./coveragereportHTML \
-#                 -verbosity:Off
-#           name: Generate code coverage report
-#       - store_artifacts:
-#           path: ./coveragereportHTML
-          
+          command: dotnet build           
       - run:
           commands:
             unit_test:
