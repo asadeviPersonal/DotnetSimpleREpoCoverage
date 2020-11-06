@@ -7,7 +7,7 @@ jobs:
     docker:
       - image: mcr.microsoft.com/dotnet/core/sdk:3.1
     steps:
-      - checkout
+#       - checkout
       - run:
           name: Restore solution
           command: dotnet restore 
@@ -38,9 +38,9 @@ jobs:
         with:
           dotnet-version: 3.1.300
        
-      - name: ReportGenerator
-        uses: danielpalme/ReportGenerator-GitHub-Action@4.7.1
-        with:
+#       - name: ReportGenerator
+#         uses: danielpalme/ReportGenerator-GitHub-Action@4.7.1
+#         with:
 #           reports: './CodeCoverageResults/../coverage.cobertura.xml' # REQUIRED # The coverage reports that should be parsed (separated by semicolon). Globbing is supported.
 #           targetdir: ./coveragereportHTML  # REQUIRED # The directory where the generated report should be saved.
 #           reporttypes: 'HtmlInline;Cobertura' # The output formats and scope (separated by semicolon) Values: Badges, Clover, Cobertura, CsvSummary, Html, HtmlChart, HtmlInline, HtmlInline_AzurePipelines, HtmlInline_AzurePipelines_Dark, HtmlSummary, JsonSummary, Latex, LatexSummary, lcov, MHtml, PngChart, SonarQube, TeamCitySummary, TextSummary, Xml, XmlSummary
