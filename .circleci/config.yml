@@ -50,7 +50,7 @@ jobs:
       - run:
           command: | 
                 dotnet reportgenerator \
-                  "-reports:./CodeCoverageResults/coverage.cobertura.xml" \
+                  "-reports:coverage.cobertura.xml" \
                   "-targetdir:./coveragereportHTML" \
                   -reporttypes:Html
 #           command: |
