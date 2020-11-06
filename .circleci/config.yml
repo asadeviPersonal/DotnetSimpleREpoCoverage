@@ -31,8 +31,8 @@ jobs:
             --settings coverlet.runsettings
             --results-directory './CodeCoverageResults'
             
-      - store_artifacts:
-          path: ./CodeCoverageResults
+#       - store_artifacts:
+#           path: ./CodeCoverageResults
           
 #       - name: Setup .NET Core # Required to execute ReportGenerator
 #         uses: actions/setup-dotnet@v1
