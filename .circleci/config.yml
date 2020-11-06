@@ -39,13 +39,7 @@ jobs:
           path: ./CodeCoverageResults
       - run:
           name: Install report
-          command: |
-          dotnet tool install -g dotnet-reportgenerator-globaltool
-#           &&
-#                   dotnet tool install dotnet-reportgenerator-globaltool --tool-path tools &&
-#                   dotnet new tool-manifest &&
-#                   dotnet tool install dotnet-reportgenerator-globaltool
-          
+          command: dotnet tool install dotnet-reportgenerator-globaltool        
           
       - run:
 #           command: reportgenerator "-reports:./CodeCoverageResults/../coverage.cobertura.xml" "-targetdir:./coveragereport" -reporttypes:Html
