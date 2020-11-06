@@ -13,45 +13,45 @@ jobs:
           command: dotnet restore 
       - run:
           name: Build solution
-          command: dotnet build           
+          command: dotnet build   
+    description: |
+      Runs a unit test against a specified project path.
+    parameters:
+      project-path:~/repo/tests/
+        description: Path to the project file to test.
+        type: string
+    steps:
       - run:
-          commands:
-            unit_test:
-              description: |
-                  Runs a unit test against a specified project path.
-              parameters:
-                  project-path: 
-                      description: Path to the project file to test.
-                      type: string
-              steps:
-                  - run:
-                      command: |
-                          dotnet test  \
-                            --logger trx \
-                            -r ~/repo/src/Tests/results \
-                            /p:CollectCoverage=true \
-                            /p:CoverletOutputFormat=opencover \
-                            /p:CoverletOutput=/root/repo/src/Tests/results/ \
-                            /p:Exclude="[MySqlConnector]*%2c[System.*]*"
-                      name: Unit Test
-                  - run:
-                      command: |
-                          reportgenerator \
-                            -reports:/root/repo/src/Tests/results/coverage.opencover.xml \
-                            -targetdir:/root/repo/src/Tests/results/html_report \
-                            -verbosity:Off
-                      name: Generate code coverage report
-                  - run:
-                      command: |
-                          trx2junit ~/repo/src/Tests/results/*.trx
-                      name: Convert test results to junit format
-                      when: always
-                  - store_test_results:
-                      path: ~/repo/src/Tests/results
-                  - store_artifacts:
-                      destination: TestResults
-                      path: ~/repo/src/Tests/results
-                  - save_cache:
-                      key: v1-unit-test-coverage-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
-                      paths:
-                          - ~/repo/src/Tests/results
+          command: |
+            dotnet test << parameters.project-path >> \
+              --logger trx \
+              -r ~/repo/Tests/results \
+              /p:CollectCoverage=true \
+              /p:CoverletOutputFormat=opencover \
+              /p:CoverletOutput=/root/repo/Tests/results/ \
+              /p:Exclude="[MySqlConnector]*%2c[System.*]*"
+          name: Unit Test
+      - run:
+          command: |
+            reportgenerator \
+              -reports:/root/repo/Tests/results/coverage.opencover.xml \
+              -targetdir:/root/repo/Tests/results/html_report \
+              -verbosity:Off
+          name: Generate code coverage report
+      - run:
+          command: |
+            trx2junit ~/repo/Tests/results/*.trx
+          name: Convert test results to junit format
+          when: always
+      - store_test_results:
+          path: ~/repo/Tests/results
+      - store_artifacts:
+          destination: TestResults
+          path: ~/repo/Tests/results
+      - save_cache:
+          key: >-
+            v1-unit-test-coverage-{{ .Environment.CIRCLE_BRANCH }}-{{
+            .Environment.CIRCLE_SHA1 }}
+          paths:
+            - ~/repo/Tests/results
+     
