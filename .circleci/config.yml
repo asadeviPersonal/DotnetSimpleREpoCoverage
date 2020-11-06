@@ -6,9 +6,6 @@ jobs:
   build:
     docker:
       - image: mcr.microsoft.com/dotnet/core/sdk:3.1
-    strategy:
-      matrix:
-        node: [6, 8, 10]
     
     steps:
 #       - checkout
@@ -46,7 +43,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           # The Node.js version to configure
-          node-version: ${{ matrix.node }}
+          node-version: 10
        
 #       - name: ReportGenerator
 #         uses: danielpalme/ReportGenerator-GitHub-Action@4.7.1
