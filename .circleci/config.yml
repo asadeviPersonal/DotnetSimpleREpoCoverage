@@ -16,7 +16,7 @@ jobs:
           command: dotnet build   
       - run:
           command: |
-            dotnet test ~/repo/tests/ \
+            dotnet test /root/repo/tests/ \
               --logger trx \
               -r ~/repo/Tests/results \
               /p:CollectCoverage=true \
