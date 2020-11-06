@@ -31,8 +31,8 @@ jobs:
             --settings coverlet.runsettings
             --results-directory './'
             
-      - store_artifacts:
-          path: ./../
+#       - store_artifacts:
+#           path: ./../
           
       - run: 
           command: export PATH="$PATH:/root/.dotnet/tools"
@@ -50,7 +50,7 @@ jobs:
       - run:
           command: | 
                 dotnet reportgenerator \
-                  "-reports:./../coverage.cobertura.xml" \
+                  "-reports:./*coverage.cobertura.xml" \
                   "-targetdir:./coveragereportHTML" \
                   -reporttypes:Html
 #           command: |
