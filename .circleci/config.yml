@@ -14,34 +14,76 @@ jobs:
       - run:
           name: Build solution
           command: dotnet build 
-      - run:
-          name: Run tests 
-          command: dotnet test --no-build --logger "trx;LogFileName=/root/project/UnitTestProject1/TestResult/xunit-output.xml"
-      - store_artifacts:
-          path: /root/project/UnitTestProject1/TestResult/
-          when: always
-      - run:
-          name: coverage
-#           command: dotnet test --no-build -v n --results-directory:test_coverage --collect:"Code Coverage"
-          command: dotnet test -c Debug -v minimal 
-            --no-build 
-            --collect:"XPlat Code Coverage" 
-            --settings coverlet.runsettings
-            --results-directory './CodeCoverageResults'
+#       - run:
+#           name: Run tests 
+#           command: dotnet test --no-build --logger "trx;LogFileName=/root/project/UnitTestProject1/TestResult/xunit-output.xml"
+#       - store_artifacts:
+#           path: /root/project/UnitTestProject1/TestResult/
+#           when: always
+#       - run:
+#           name: coverage
+# #           command: dotnet test --no-build -v n --results-directory:test_coverage --collect:"Code Coverage"
+#           command: dotnet test -c Debug -v minimal 
+#             --no-build 
+#             --collect:"XPlat Code Coverage" 
+#             --settings coverlet.runsettings
+#             --results-directory './CodeCoverageResults'
             
-      - store_artifacts:
-          path: ./CodeCoverageResults
-      - run:
-          name: Install report
-          command: dotnet tool install -g dotnet-reportgenerator-globaltool
+#       - store_artifacts:
+#           path: ./CodeCoverageResults
+#       - run:
+#           name: Install report
+#           command: dotnet tool install -g dotnet-reportgenerator-globaltool
+          
+#       - run:
+# #           command: reportgenerator "-reports:./CodeCoverageResults/../coverage.cobertura.xml" "-targetdir:./coveragereport" -reporttypes:Html
+#           command: |
+#               reportgenerator \
+#                 -reports:./CodeCoverageResults/../coverage.cobertura.xml \
+#                 -targetdir:./coveragereportHTML \
+#                 -verbosity:Off
+#           name: Generate code coverage report
+#       - store_artifacts:
+#           path: ./coveragereportHTML
           
       - run:
-#           command: reportgenerator "-reports:./CodeCoverageResults/../coverage.cobertura.xml" "-targetdir:./coveragereport" -reporttypes:Html
-          command: |
-              reportgenerator \
-                -reports:./CodeCoverageResults/../coverage.cobertura.xml \
-                -targetdir:./coveragereportHTML \
-                -verbosity:Off
-          name: Generate code coverage report
-      - store_artifacts:
-          path: ./coveragereportHTML
+          commands:
+            unit_test:
+              description: |
+                  Runs a unit test against a specified project path.
+              parameters:
+                  project-path: 
+                      description: Path to the project file to test.
+                      type: string
+              steps:
+                  - run:
+                      command: |
+                          dotnet test  \
+                            --logger trx \
+                            -r ~/repo/src/Tests/results \
+                            /p:CollectCoverage=true \
+                            /p:CoverletOutputFormat=opencover \
+                            /p:CoverletOutput=/root/repo/src/Tests/results/ \
+                            /p:Exclude="[MySqlConnector]*%2c[System.*]*"
+                      name: Unit Test
+                  - run:
+                      command: |
+                          reportgenerator \
+                            -reports:/root/repo/src/Tests/results/coverage.opencover.xml \
+                            -targetdir:/root/repo/src/Tests/results/html_report \
+                            -verbosity:Off
+                      name: Generate code coverage report
+                  - run:
+                      command: |
+                          trx2junit ~/repo/src/Tests/results/*.trx
+                      name: Convert test results to junit format
+                      when: always
+                  - store_test_results:
+                      path: ~/repo/src/Tests/results
+                  - store_artifacts:
+                      destination: TestResults
+                      path: ~/repo/src/Tests/results
+                  - save_cache:
+                      key: v1-unit-test-coverage-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
+                      paths:
+                          - ~/repo/src/Tests/results
