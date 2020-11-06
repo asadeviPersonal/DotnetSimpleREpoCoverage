@@ -49,9 +49,9 @@ jobs:
 
       - run:
           command: | 
-                reportgenerator 
-                  "-reports:./CodeCoverageResults/../coverage.cobertura.xml" 
-                  "-targetdir:./coveragereportHTML" 
+                reportgenerator \
+                  -reports:./CodeCoverageResults/../coverage.cobertura.xml \
+                  -targetdir:./coveragereportHTML \
                   -reporttypes:Html
 #           command: |
 #               reportgenerator \
