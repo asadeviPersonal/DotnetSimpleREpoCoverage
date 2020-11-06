@@ -14,7 +14,6 @@ jobs:
       - run:
           name: Build solution
           command: dotnet build   
-    steps:
       - run:
           command: |
             dotnet test ~/repo/tests/ \
