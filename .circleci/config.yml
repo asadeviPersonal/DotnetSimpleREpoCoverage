@@ -36,16 +36,31 @@ jobs:
           
       - run:
           name: install report
-          command: Install-Package ReportGenerator -Version 4.7.1
-      - run: 
-          command: dotnet add package ReportGenerator --version x.y.z
-          name: pakage
+          command: | 
+            dotnet tool install --global dotnet-reportgenerator-globaltool --version 4.7.1
+            dotnet tool install dotnet-reportgenerator-globaltool --tool-path tools --version 4.7.1
+            dotnet new tool-manifest
+            dotnet tool install dotnet-reportgenerator-globaltool --version 4.7.1
+#       - run: 
+#           command: dotnet add package ReportGenerator --version x.y.z
+#           name: pakage
 
       - run:
-          command: dotnet $(asadeviPersonal)\.nuget\packages\reportgenerator\x.y.z\tools\netcoreapp3.0\ReportGenerator.dll \
-                  "-reports:./CodeCoverageResults/../coverage.cobertura.xml" \
-                  "-targetdir:./coveragereportHTML" \
-                  -reporttypes:Html
+          command: | 
+                reportgenerator \
+              "-reports:./CodeCoverageResults/../coverage.cobertura.xml" \
+              "-targetdir:./coveragereportHTML" \
+              -reporttypes:Html
+#           command: |
+#               reportgenerator \
+#                 -reports:./CodeCoverageResults/../coverage.cobertura.xml \
+#                 -targetdir:./coveragereportHTML \
+#                 -verbosity:Off
+          name: Generate code coverage report
+#           command: dotnet $(asadeviPersonal)\.nuget\packages\reportgenerator\x.y.z\tools\netcoreapp3.0\ReportGenerator.dll \
+#                   "-reports:./CodeCoverageResults/../coverage.cobertura.xml" \
+#                   "-targetdir:./coveragereportHTML" \
+#                   -reporttypes:Html
                   
       - store_artifacts:
           path: ./coveragereportHTML
