@@ -14,8 +14,6 @@ jobs:
       - run:
           name: Build solution
           command: dotnet build   
-    description: |
-      Runs a unit test against a specified project path.
     parameters:
       project-path:~/repo/tests/
         description: Path to the project file to test.
