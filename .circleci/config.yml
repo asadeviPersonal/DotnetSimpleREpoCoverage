@@ -39,12 +39,7 @@ jobs:
 #         with:
 #           dotnet-version: 3.1.300
 
-
-      - uses: actions/setup-node@v1
-        with:
-          # The Node.js version to configure
-          node-version: 10
-       
+      
 #       - name: ReportGenerator
 #         uses: danielpalme/ReportGenerator-GitHub-Action@4.7.1
 #         with:
@@ -64,9 +59,19 @@ jobs:
           
 #       - run:
 #           name: Install report
-#           command: dotnet tool install dotnet-reportgenerator-globaltool       
-
-          
+#           command: dotnet tool install dotnet-reportgenerator-globaltool  
+        - run:
+            name: install report
+            command: Install-Package ReportGenerator -Version 4.7.1
+        - run: 
+            command: dotnet add package ReportGenerator --version x.y.z
+            name: pakage
+            
+        - run:
+            command: dotnet $(asadeviPersonal)\.nuget\packages\reportgenerator\x.y.z\tools\netcoreapp3.0\ReportGenerator.dll \
+                    "-reports:./CodeCoverageResults/../coverage.cobertura.xml" \
+                    "-targetdir:./coveragereportHTML" \
+                    -reporttypes:Html
 #       - run:
 #           command: reportgenerator "-reports:./CodeCoverageResults/../coverage.cobertura.xml" "-targetdir:./coveragereport" -reporttypes:Html
 #           command: dotnet $(asadeviPersonal).nuget\packages\reportgenerator\x.y.z\tools\netcoreapp3.0\ReportGenerator.dll -reports:./CodeCoverageResults/../coverage.cobertura.xml \
@@ -85,7 +90,7 @@ jobs:
           path: ./coveragereportHTML
           
           
-          
+       
           
 #       - run:
 #           command: |
