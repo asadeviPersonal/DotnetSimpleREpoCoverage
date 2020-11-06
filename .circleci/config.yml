@@ -6,6 +6,10 @@ jobs:
   build:
     docker:
       - image: mcr.microsoft.com/dotnet/core/sdk:3.1
+    strategy:
+      matrix:
+        node: [6, 8, 10]
+    
     steps:
 #       - checkout
       - run:
@@ -33,10 +37,16 @@ jobs:
       - store_artifacts:
           path: ./CodeCoverageResults
           
-      - name: Setup .NET Core # Required to execute ReportGenerator
-        uses: actions/setup-dotnet@v1
+#       - name: Setup .NET Core # Required to execute ReportGenerator
+#         uses: actions/setup-dotnet@v1
+#         with:
+#           dotnet-version: 3.1.300
+
+
+      - uses: actions/setup-node@v1
         with:
-          dotnet-version: 3.1.300
+          # The Node.js version to configure
+          node-version: ${{ matrix.node }}
        
 #       - name: ReportGenerator
 #         uses: danielpalme/ReportGenerator-GitHub-Action@4.7.1
