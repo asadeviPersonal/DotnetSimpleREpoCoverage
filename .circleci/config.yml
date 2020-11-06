@@ -23,7 +23,8 @@ jobs:
           when: always
       - run:
           name: coverage
-          command: dotnet test \
+          command: |
+              dotnet test \
               --logger trx \
               -r ~/repo/Tests/results \
               /p:CollectCoverage=true \
