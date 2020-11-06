@@ -29,10 +29,10 @@ jobs:
             --no-build 
             --collect:"XPlat Code Coverage" 
             --settings coverlet.runsettings
-            --results-directory './CodeCoverageResults'
+            --results-directory './'
             
       - store_artifacts:
-          path: ./CodeCoverageResults
+          path: ./
           
       - run: 
           command: export PATH="$PATH:/root/.dotnet/tools"
