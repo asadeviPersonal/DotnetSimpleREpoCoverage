@@ -38,14 +38,13 @@ jobs:
           command: export PATH="$PATH:/root/.dotnet/tools"
           name: pakage
           
-#       - run:
-#           name: install report
-#           command: | 
-#             dotnet tool install --global dotnet-reportgenerator-globaltool --version 4.7.1
-#             dotnet tool install dotnet-reportgenerator-globaltool --tool-path tools --version 4.7.1
-#             dotnet new tool-manifest
-#             dotnet tool install dotnet-reportgenerator-globaltool --version 4.7.1
-
+      - run:
+          name: install report
+          command: | 
+            dotnet tool install --global dotnet-reportgenerator-globaltool --version 4.7.1
+            dotnet tool install dotnet-reportgenerator-globaltool --tool-path tools --version 4.7.1
+            dotnet new tool-manifest
+            dotnet tool install dotnet-reportgenerator-globaltool --version 4.7.1
 
       - run:
           command: | 
